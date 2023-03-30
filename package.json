@@ -1,0 +1,20 @@
+{
+	"name": "socketTCP",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/LFF5644/socketTCP.git"
+	},
+	"keywords": [],
+	"author": "LFF5644",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/LFF5644/socketTCP/issues"
+	},
+	"homepage": "https://github.com/LFF5644/socketTCP#readme"
+}
