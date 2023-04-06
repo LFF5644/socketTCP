@@ -7,6 +7,7 @@ const host=process.env.socketTCP_host||"127.0.0.1";
 const files=new Map();
 
 const socket=socketIoClient(`http://${host}:${port}`);
+console.log(`connecting to ${host} with port ${port}`);
 
 socket.on("connect",()=>{
 	console.log("connected as "+socket.id);
