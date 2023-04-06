@@ -4,7 +4,7 @@ Socket Io Sender and Reviver!
 
 ## Install
 ```
-sudo apt install nodejs # install nodejs
+sudo apt install nodejs git # install nodejs and git
 cd <you programmes path> # you can also go to ~/Desktop
 git clone git@github.com:LFF5644/socketTCP.git # download all file form github and paste this files in "./socketTCP"
 cd socketTCP/
@@ -35,7 +35,7 @@ cd client/
 export socketTCP_host="<server ip>" # server ip, default "localhost"
 export socketTCP_get="<file>" # file to get from server, example "~/Desktop/test.txt"
 export socketTCP_output="<output file>" # default "outputFile.bin"
-node index.js # run the client
+node index.js # run client
 ```
 
 
