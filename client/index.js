@@ -3,15 +3,26 @@ const socketIoClient=require("socket.io-client");
 const fs=require("fs");
 
 const port=process.env.socketTCP_port||3245;
+const host=process.env.socketTCP_host||"127.0.0.1";
 const files=new Map();
 
-const socket=socketIoClient(`http://localhost:${port}`);
+const socket=socketIoClient(`http://${host}:${port}`);
 
 socket.on("connect",()=>{
 	console.log("connected as "+socket.id);
-	if(process.argv[2]){
-		const path=process.argv[2];
-		const output=process.argv[3]||"file.bin";
+	if(
+		process.argv[2]||
+		process.env.socketTCP_get
+	){
+		const path=(
+			process.argv[2]||
+			process.env.socketTCP_get
+		);
+		const output=(
+			process.argv[3]||
+			process.env.socketTCP_output||
+			"outputFile.bin"
+		);
 		console.log("get file "+path);
 		socket.emit("get-file",path,data=>{
 			files.set(data.id,{

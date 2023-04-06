@@ -3,7 +3,11 @@ const socketIo=require("socket.io");
 const fs=require("fs");
 
 const port=process.env.socketTCP_port||3245;
-const sendBytesPerChunk=Number(process.argv[2]||1024);
+const sendBytesPerChunk=Number(
+	process.env.socketTCP_chunkSize||
+	process.argv[2]||
+	1024
+);
 
 function readFile(path){return new Promise((async (resolve,reject)=>{
 	fs.readFile(path,(error,buffer)=>{
