@@ -41,7 +41,7 @@ socket.on("get-file",(id,startIndex,chunk,cb)=>{
 		return;
 	}
 
-	for(let index=0; index<chunk.length+1; index++){
+	for(let index=0; index<chunk.length; index++){
 		entry.buffer[startIndex+index]=chunk[index];
 	}
 
