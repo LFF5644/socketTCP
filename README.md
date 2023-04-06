@@ -1,6 +1,7 @@
 # Socket IO TCP
 Socket Io Sender and Reviver!
 
+
 ## Install
 ```
 sudo apt install nodejs # install nodejs
@@ -10,8 +11,11 @@ cd socketTCP/
 # start here if you alrady have this repo on you device
 npm install # download all required modules in the package.json file
 ```
+
+
 #### Tipp
 for exit press `STRG + C` (`^C`)
+
 
 ## Start Server
 WARNING: erveryone has accses to all you files!
@@ -22,6 +26,8 @@ export socketTCP_port="<port>" # default is "3245"
 export socketTCP_chunkSize="<chunk size>" # in bytes, default is "1048576" (1MB), example "1024" (1KB)
 node index.js # run server
 ```
+
+
 ## Start Client
 ```
 cd <path to socketTCP>
@@ -33,14 +39,23 @@ node index.js # run the client
 ```
 
 
+## Update to newest Version
+```
+cd <path to socketTCP>
+git pull
+```
+if newest version you get `Already up to date.`!
+else look *Example: Update*
+
+
 ### Example: Installation
 ```
 lff@lff-raspberrypi:~$ cd /tmp/
 lff@lff-raspberrypi:/tmp$ git clone git@github.com:LFF5644/socketTCP.git
-"..."
+[...]
 lff@lff-raspberrypi:/tmp$ cd socketTCP/
 lff@lff-raspberrypi:/tmp/socketTCP$ npm install
-"..."
+[...]
 lff@lff-raspberrypi:/tmp/socketTCP$
 ```
 
@@ -58,6 +73,7 @@ Datei: "/home/lff/test.txt" with size 41 Bytes. Wurde übertragen in 0.09 Sekund
 ^C
 lff@lff-raspberrypi:/tmp/socketTCP/server$
 ```
+
 
 ### Example: Client
 ```
@@ -78,4 +94,22 @@ Im a test file!
 
 have fun!
 lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP/client$
+```
+
+
+### Example: Update
+```
+lff@lff-raspberrypi:/tmp/socketTCP$ git pull
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), 1.64 KiB | 52.00 KiB/s, done.
+From github.com:LFF5644/socketTCP
+   ec14db4..a96c4c9  master     -> origin/master
+Updating ec14db4..a96c4c9
+Fast-forward
+ README.md | 79 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+lff@lff-raspberrypi:/tmp/socketTCP$
 ```
