@@ -25,17 +25,24 @@ const io=socketIo(port,{
 
 io.on("connection",socket=>{
 	socket.on("get-file",(async (path,callback)=>{
+		const file=path.split("/").pop();
 		let buffer;
 		try{
 			buffer=await readFile(path);
 		}
-		catch(e){return;}
+		catch(e){
+			callback({
+				error: true,
+				file,
+				path,
+			});
+			return;
+		}
 
 		// array buffer: [99, 111, 110, 115, 111, 108, ...]
 		// buffer: <Buffer 63 6f 6e 73 6f ...>
 		// array buffer supports .map and other functions
 
-		const file=path.split("/").pop();
 		const fileSize=buffer.length;
 		let sendId;
 		{
