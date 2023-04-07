@@ -17,11 +17,9 @@
 		"url": "https://github.com/LFF5644/socketTCP/issues"
 	},
 	"homepage": "https://github.com/LFF5644/socketTCP#readme",
-	"devDependencies": {
-		"@types/socket.io": "^2.1.13"
-	},
 	"dependencies": {
 		"socket.io": "^4.6.1",
-		"socket.io-client": "^4.6.1"
+		"socket.io-client": "^4.6.1",
+		"get_dir_files":"git+ssh://git@github.com:LFF5644/getDirFiles.git"
 	}
 }

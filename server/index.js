@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 const socketIo=require("socket.io");
+const getDirFiles=require("get_dir_files");
 const fs=require("fs");
 
 const port=process.env.socketTCP_port||3245;
 const sendBytesPerChunk=Number(
 	process.env.socketTCP_chunkSize||
 	process.argv[2]||
-	1024
+	1024*1024
 );
 
 function readFile(path){return new Promise((async (resolve,reject)=>{
@@ -71,6 +72,20 @@ io.on("connection",socket=>{
 		const timeSec=Math.round(((endTime-startTime)/1000)*200)/200;
 		console.log(`Datei: "${path}" with size ${fileSize} Bytes. Wurde übertragen in ${timeSec} Sekunden, ${Math.round(timeSec/60*100)/100} Minuten`);
 	}));
+	socket.on("get-files",(path,types,callback)=>{
+		const data={
+			code: "ok",
+		};
+		try{
+			let files=getDirFiles.getFiles(path);
+			if(types) files=getDirFiles.filterFiles(files,filter);
+			data.data=files;
+		}catch(e){
+			data.code="error";
+			data.error=e;
+		}
+		callback(data);
+	});
 });
 
 console.log(`Socket Server ist Online auf Port ${port}!\nChunk Größe beträgt ${sendBytesPerChunk} Bytes!\n`);
