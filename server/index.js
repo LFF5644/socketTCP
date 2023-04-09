@@ -82,16 +82,16 @@ io.on("connection",socket=>{
 	socket.on("listFiles",(path,types,callback)=>{
 		const data={
 			code: "ok",
-			data: null,
+			data: getDirFiles.getFiles(path),
 		};
-		try{
+		/*try{
 			let files=getDirFiles.getFiles(path);
 			if(!files) throw "";
 			if(types) files=getDirFiles.filterFiles(files,filter);
 			data.data=files;
 		}catch(e){
 			data.code="dir not found";
-		}
+		}*/
 		callback(data);
 	});
 });
