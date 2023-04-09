@@ -9,6 +9,7 @@ const sockets=new Map();
 
 function getFile(id,path){return new Promise((resolve,reject)=>{
 	const socket=sockets.get(id);
+	console.log(id);
 	socket.emit("get-file",path,data=>{
 		console.log(data);
 		if(!data.error) files.set(data.id,{
