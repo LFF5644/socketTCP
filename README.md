@@ -35,7 +35,7 @@ cd client/
 export socketTCP_host="<server ip>" # server ip, default "localhost"
 export socketTCP_get="<file>" # file to get from server, example "~/Desktop/test.txt"
 export socketTCP_output="<output file>" # default "outputFile.bin"
-node index.js # run client
+node demo.js # run client
 ```
 
 
@@ -81,7 +81,7 @@ lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP$ cd client/
 lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP/client$ export socketTCP_host="192.168.178.55"
 lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP/client$ export socketTCP_get="/home/lff/test.txt"
 lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP/client$ export socketTCP_output="helloWorld.txt"
-lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP/client$ node index.js
+lff@LFF-Server:~/bind/myOwnProgrammes/nodejs/socketTCP/client$ node demo.js
 connecting to 192.168.178.55 with port 3245
 connected as -CLxZsB7ubnBgf8bAAAD
 get file /home/lff/test.txt
