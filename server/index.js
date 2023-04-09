@@ -87,7 +87,7 @@ io.on("connection",socket=>{
 		try{
 			let files=getDirFiles.getFiles(path);
 			if(!files) throw "";
-			//if(types) files=getDirFiles.filterFiles(files,filter);
+			if(types) files=getDirFiles.filterFiles(files,filter);
 			data.data=files;
 		}catch(e){
 			data.code="dir not found";
