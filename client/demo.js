@@ -46,6 +46,9 @@ else if(process.env.socketTCP_getType==="dir") client.listFiles(
 	:null
 )
 	.then(files=>{
+		if(process.env.socketTCP_filter){
+			files=getDirFiles.filterFiles(files,process.env.socketTCP_filter.split(","))
+		}
 		console.log(files.join("\n"));
 		client.disconnect();
 	})

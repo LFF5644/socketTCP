@@ -82,14 +82,15 @@ io.on("connection",socket=>{
 	socket.on("listFiles",(path,types,callback)=>{
 		const data={
 			code: "ok",
+			data: null,
 		};
 		try{
 			let files=getDirFiles.getFiles(path);
-			if(types) files=getDirFiles.filterFiles(files,filter);
+			if(!files) throw "";
+			//if(types) files=getDirFiles.filterFiles(files,filter);
 			data.data=files;
 		}catch(e){
-			data.code="error";
-			data.error=e;
+			data.code="dir not found";
 		}
 		callback(data);
 	});

@@ -30,9 +30,11 @@ function listFiles(id,path,types){
 		socket.emit("listFiles",path,types,data=>{
 			if(data.code==="ok"){
 				resolve(data.data);
+				return;
 			}
-			else if(data.code==="error"){
-				reject(data.error);
+			else{
+				reject(data.code);
+				return;
 			}
 		});
 	})
