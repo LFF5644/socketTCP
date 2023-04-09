@@ -79,7 +79,7 @@ io.on("connection",socket=>{
 		const timeSec=Math.round(((endTime-startTime)/1000)*200)/200;
 		console.log(`Datei: "${path}" with size ${fileSize} Bytes. Wurde übertragen in ${timeSec} Sekunden, ${Math.round(timeSec/60*100)/100} Minuten`);
 	}));
-	socket.on("get-files",(path,types,callback)=>{
+	socket.on("listFiles",(path,types,callback)=>{
 		const data={
 			code: "ok",
 		};

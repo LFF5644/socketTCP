@@ -24,7 +24,20 @@ function getFile(id,path){return new Promise((resolve,reject)=>{
 		if(data.error) reject(data);
 	});
 })}
-
+function listFiles(id,path,types){
+	const socket=sockets.get(id);
+	return new Promise((resolve,reject)=>{
+		socket.emit("listFiles",path,types,data=>{
+			if(data.code==="ok"){
+				resolve(data.data);
+			}
+			else if(data.code==="error"){
+				reject(data.error);
+			}
+		});
+	})
+	
+}
 function createClient(host="127.0.0.1",port=3245){
 	const socket=socketIoClient(`http://${host}:${port}`);
 	sockets.set(socket.id,socket);
@@ -68,7 +81,8 @@ function createClient(host="127.0.0.1",port=3245){
 		cb(true);
 	});
 	return{
-		getFile: path=> getFile(socket.id,path),
+		getFile: path=>getFile(socket.id,path),
+		listFiles: (path,type)=>listFiles(socket.id,path,type),
 		disconnect: ()=>socket.disconnect(),
 		connect: ()=>socket.connect(),
 	};
