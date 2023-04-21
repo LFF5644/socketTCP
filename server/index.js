@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const socketIo=require("socket.io");
-const getDirFiles=require("get_dir_files");
+const directoryTools=require("directoryTools");
 const fs=require("fs");
 
 const port=process.env.socketTCP_port||3245;
@@ -80,7 +80,7 @@ io.on("connection",socket=>{
 		console.log(`Datei: "${path}" with size ${fileSize} Bytes. Wurde übertragen in ${timeSec} Sekunden, ${Math.round(timeSec/60*100)/100} Minuten`);
 	}));
 	socket.on("listFiles",(path,types,callback)=>{
-		const files=getDirFiles.getFiles(path);
+		const files=directoryTools.getFiles(path);
 		const useTypes=(
 			types&&
 			typeof(types)==="object"&&
@@ -88,7 +88,7 @@ io.on("connection",socket=>{
 		);
 		callback(
 			useTypes?
-				getDirFiles.filterFiles(
+				directoryTools.filterFiles(
 					files,
 					types
 				)
