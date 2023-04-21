@@ -33,12 +33,42 @@ function listFiles(id,path,types){
 	})
 	
 }
+function writeFile(id,path,buffer){
+	const socket=sockets.get(id);
+	return new Promise((resolve,reject)=>{
+		socket.emit("writeFile",path,buffer,data=>{
+			const {success,error}=data;
+			if(error) reject(error);
+			else resolve(success?true:false);
+		});
+	});
+}
+function mkdir(id,path){
+	const socket=sockets.get(id);
+	return new Promise((resolve)=>{
+		socket.emit("mkdir",path,data=>{
+			const {success}=data;
+			resolve(success?true:false);
+		});
+	});
+}
+function removeFile(id,path){
+	const socket=sockets.get(id);
+	return new Promise((resolve,reject)=>{
+		socket.emit("removeFile",path,data=>{
+			const {success,error}=data;
+			if(error) reject(error); 
+			resolve(success?true:false);
+		});
+	});
+}
 function createClient(host="127.0.0.1",port=3245){
 	const socket=socketIoClient(`http://${host}:${port}`);
-	sockets.set(socket.id,socket);
+	const id=socket.id;
+	sockets.set(id,socket);
 	console.log(`connecting to ${host} with port ${port}`);
 	socket.on("connect",()=>{
-		console.log(`connected as ${socket.id}`);
+		console.log(`connected as ${id}`);
 	});
 	socket.on("disconnect",()=>console.log("disconnect"));
 	socket.on("get-file",(id,startIndex,chunk,cb)=>{
@@ -76,10 +106,13 @@ function createClient(host="127.0.0.1",port=3245){
 		cb(true);
 	});
 	return{
-		getFile: path=>getFile(socket.id,path),
-		listFiles: (path,types)=>listFiles(socket.id,path,types),
-		disconnect: ()=>socket.disconnect(),
 		connect: ()=>socket.connect(),
+		disconnect: ()=>socket.disconnect(),
+		getFile: path=>getFile(id,path),
+		listFiles: (path,types)=>listFiles(id,path,types),
+		mkdir: path=>mkdir(id,path),
+		removeFile: path=>removeFile(id,path),
+		writeFile: (path,buffer)=>writeFile(id,path,buffer),
 	};
 }
 

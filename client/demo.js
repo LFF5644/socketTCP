@@ -55,4 +55,21 @@ else if(process.env.socketTCP_getType==="dir") client.listFiles(
 	.catch(error=>{
 		console.log("server error",error);
 		throw error;
-	})
+	});
+
+else if(process.env.socketTCP_getType==="send"){
+	const file=process.env.socketTCP_get;
+	const buffer=fs.readFileSync(file);
+	const output=process.env.socketTCP_output||"outputFile.bin";
+
+	console.log(`Sending File ${file} with ${buffer.length} Bytes to Server ...`);
+	client.writeFile(output,buffer)
+		.then(()=>{
+			console.log(`File Saved as ${output} on the Server!`);
+			client.disconnect();
+		})
+		.catch(error=>{
+			console.log("SERVER ERROR!",error.code);
+			client.disconnect();
+		});
+}

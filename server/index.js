@@ -95,6 +95,24 @@ io.on("connection",socket=>{
 			:files
 		);
 	});
+	socket.on("writeFile",(path,buffer,callback)=>{
+		fs.writeFile(path,buffer,(error)=>{
+			if(error) callback({error});
+			else callback({success: true});
+		});
+	});
+	socket.on("mkdir",(path,callback)=>{
+		fs.mkdir(path,(error)=>{
+			if(error) callback({error});
+			else callback({success: true});
+		});
+	});
+	socket.on("removeFile",(path,callback)=>{
+		fs.unlink(path,(error)=>{
+			if(error) callback({error});
+			else callback({success: true});
+		});
+	});
 });
 
 console.log(`Socket Server ist Online auf Port ${port}!\nChunk Größe beträgt ${sendBytesPerChunk} Bytes!\n`);
