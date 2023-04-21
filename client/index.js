@@ -64,11 +64,10 @@ function removeFile(id,path){
 }
 function createClient(host="127.0.0.1",port=3245){
 	const socket=socketIoClient(`http://${host}:${port}`);
-	let id=socket.id;
+	const id=Date.now();
 	sockets.set(id,socket);
 	console.log(`connecting to ${host} with port ${port}`);
 	socket.on("connect",()=>{
-		id=socket.id
 		console.log(`connected as ${socket.id}`);
 	});
 	socket.on("disconnect",()=>console.log("disconnect"));
