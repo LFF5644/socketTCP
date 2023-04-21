@@ -86,16 +86,10 @@ io.on("connection",socket=>{
 			typeof(types)==="object"&&
 			types.length>0
 		);
-		callback(
-			useTypes?
-				directoryTools.filterFiles(
-					files,
-					types
-				)
-			:files
-		);
+		callback(useTypes? directoryTools.filterFiles(files,types): files);
 	});
 	socket.on("writeFile",(path,buffer,callback)=>{
+		directoryTools.makeDirectoriesInPath(path)
 		fs.writeFile(path,buffer,(error)=>{
 			if(error) callback({error});
 			else callback({success: true});
@@ -105,6 +99,11 @@ io.on("connection",socket=>{
 		fs.mkdir(path,(error)=>{
 			if(error) callback({error});
 			else callback({success: true});
+		});
+	});
+	socket.on("mkdirs",(path,callback)=>{
+		callback({
+			success: directoryTools.makeDirectoriesInPath(path),
 		});
 	});
 	socket.on("removeFile",(path,callback)=>{
