@@ -2,9 +2,11 @@
 	"name": "socket-tcp",
 	"version": "1.0.1",
 	"description": "",
-	"main": "server/index.js",
+	"main": "client/index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"server": "clear; cd server; node index; cd ..",
+		"client": "clear; cd client; node index; cd ..",
+		"demo": "clear; cd demo; node index; cd .."
 	},
 	"repository": {
 		"type": "git",
