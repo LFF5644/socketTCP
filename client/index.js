@@ -68,7 +68,7 @@ function createClient(host="127.0.0.1",port=3245){
 	sockets.set(id,socket);
 	console.log(`connecting to ${host} with port ${port}`);
 	socket.on("connect",()=>{
-		console.log(`connected as ${socket.id}`);
+		console.log(`connected to "${host}:${port}" as "${socket.id}"`);
 	});
 	socket.on("disconnect",()=>console.log("disconnect"));
 	socket.on("get-file",(id,startIndex,chunk,cb)=>{
