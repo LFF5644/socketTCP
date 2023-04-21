@@ -80,19 +80,20 @@ io.on("connection",socket=>{
 		console.log(`Datei: "${path}" with size ${fileSize} Bytes. Wurde übertragen in ${timeSec} Sekunden, ${Math.round(timeSec/60*100)/100} Minuten`);
 	}));
 	socket.on("listFiles",(path,types,callback)=>{
-		const data={
-			code: "ok",
-			data: getDirFiles.getFiles(path),
-		};
-		/*try{
-			let files=getDirFiles.getFiles(path);
-			if(!files) throw "";
-			if(types) files=getDirFiles.filterFiles(files,filter);
-			data.data=files;
-		}catch(e){
-			data.code="dir not found";
-		}*/
-		callback(data);
+		const files=getDirFiles.getFiles(path);
+		const useTypes=(
+			types&&
+			typeof(types)==="object"&&
+			types.length>0
+		);
+		callback(
+			useTypes?
+				getDirFiles.filterFiles(
+					files,
+					types
+				)
+			:files
+		);
 	});
 });
 

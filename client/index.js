@@ -9,7 +9,6 @@ const sockets=new Map();
 
 function getFile(id,path){return new Promise((resolve,reject)=>{
 	const socket=sockets.get(id);
-	console.log(id);
 	socket.emit("get-file",path,data=>{
 		console.log(data);
 		if(!data.error) files.set(data.id,{
@@ -29,14 +28,7 @@ function listFiles(id,path,types){
 	const socket=sockets.get(id);
 	return new Promise((resolve,reject)=>{
 		socket.emit("listFiles",path,types,data=>{
-			if(data.code==="ok"){
-				resolve(data.data);
-				return;
-			}
-			else{
-				reject(data.code);
-				return;
-			}
+			resolve(data);
 		});
 	})
 	
@@ -85,7 +77,7 @@ function createClient(host="127.0.0.1",port=3245){
 	});
 	return{
 		getFile: path=>getFile(socket.id,path),
-		listFiles: (path,type)=>listFiles(socket.id,path,type),
+		listFiles: (path,types)=>listFiles(socket.id,path,types),
 		disconnect: ()=>socket.disconnect(),
 		connect: ()=>socket.connect(),
 	};

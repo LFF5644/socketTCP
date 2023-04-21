@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const socketTpcClient=require("./index");
 const fs=require("fs");
 
@@ -46,10 +47,9 @@ else if(process.env.socketTCP_getType==="dir") client.listFiles(
 	:null
 )
 	.then(files=>{
-		if(process.env.socketTCP_filter){
-			files=getDirFiles.filterFiles(files,process.env.socketTCP_filter.split(","))
-		}
+		console.log(files);
 		console.log(files.join("\n"));
+		console.log(files.length,"found!");
 		client.disconnect();
 	})
 	.catch(error=>{
