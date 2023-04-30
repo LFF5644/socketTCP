@@ -3,10 +3,10 @@ const socketIo=require("socket.io");
 const directoryTools=require("directoryTools");
 const fs=require("fs");
 
-const port=process.env.socketTCP_port||3245;
+const port=Number(process.env.socketTCP_port)||process.argv[2]||3245;
 const sendBytesPerChunk=Number(
 	process.env.socketTCP_chunkSize||
-	process.argv[2]||
+	process.argv[3]||
 	1024*1024
 );
 
@@ -72,7 +72,6 @@ io.on("connection",socket=>{
 			await new Promise(resolve=>{ // send chunk to client
 				socket.emit("get-file",sendId,index,chunk,resolve);
 			});
-			process.stdout.write(`Datei "${file}": ${String(index).padStart(String(fileSize).length,"0")}/${fileSize} wurden gesendet ...\r`);
 		}
 		socket.emit("get-file",sendId,true,null);
 		const endTime=Date.now();

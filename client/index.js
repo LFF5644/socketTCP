@@ -2,92 +2,54 @@
 const socketIoClient=require("socket.io-client");
 const fs=require("fs");
 
-const maxFileRequests=1;
 const files=new Map();
 const sockets=new Map();
-const fileRequestMemory=new Map();
-let fileRequestMemory_openedIds=[];
 
 function getFile(id,path){return new Promise((resolve,reject)=>{
 	const socket=sockets.get(id);
-	const requests=fileRequestMemory.get(id);
-	console.log("add "+path+" to download list");
-	requests.push({
-		path,
-		reject,
-		resolve,
-		isActive: false,
+	let options={
+		path: null,
+		onReject: (error,path,reject)=>{
+			console.log("cant download file "+path);
+			reject(path);
+		},
+		onResolve: (value,path,resolve)=>{
+			console.log("downloaded "+path);
+			resolve(value);
+		},
+	};
+	if(typeof(path)==="object"){
+		options={
+			...options,
+			...path,
+		};
+		path=path.path;
+
+	}
+	console.log("ask server for downloading "+path);
+	socket.emit("get-file",path,data=>{
+		console.log("server accept download request for "+path);
+		if(!data.error) files.set(data.id,{
+			buffer: new Uint8Array(data.size),
+			file: data.file,
+			finished: false,
+			id: data.id,
+			path,
+			reject: error=>(
+				options.onReject
+				?	options.onReject(error,path,reject)
+				:	reject(error)
+			),
+			resolve: value=>(
+				options.onResolve
+				?	options.onResolve(value,path,resolve)
+				:	resolve(value)
+			),
+			size: data.size,
+		});
+		if(data.error) reject(data);
 	});
-	fileRequestMemory.set(id,requests);
-
-	startMakeFileRequests(id);
 })}
-function startMakeFileRequests(id){
-	const socket=sockets.get(id);
-	const requests=fileRequestMemory.get(id);
-
-	if(requests.some(item=>item.isActive)) return false;
-	if(fileRequestMemory_openedIds.includes(id)) return false;
-	fileRequestMemory_openedIds.push(id);
-
-	const fn=cb=>{
-		const returnFn=cb=>setTimeout(()=>fn(cb),1e3);
-		const requests=fileRequestMemory.get(id);
-		let activeRequests=(requests
-			.filter(item=>item.isActive)
-			.length	
-		);
-		if(activeRequests>maxFileRequests) return;
-		if(requests.length===0) return;
-
-		for(const index in requests){
-			const {path,reject,resolve}=requests[index];
-			fileRequestMemory.set(id,
-				fileRequestMemory.get(id)
-					.map(item=>item.path!==path?item:({
-						...item,
-						isActive: true,
-					}))
-			);
-			socket.emit("get-file",path,data=>{
-				console.log(data);
-				if(!data.error) files.set(data.id,{
-					buffer: new Uint8Array(data.size),
-					file: data.file,
-					finished: false,
-					id: data.id,
-					path,
-					reject,
-					resolve: value=>{
-						fileRequestMemory.set(id,
-							fileRequestMemory.get(id)
-								.filter(item=>item.path!=path)
-						);
-						resolve(value);
-					},
-					size: data.size,
-				});
-				if(data.error) reject(data);
-			});
-
-			activeRequests+=1;
-			if(cb) cb();
-			if(activeRequests>maxFileRequests) return returnFn;
-		}
-		if(cb) cb();
-		return returnFn;
-	};
-	const secondFn=()=>{
-		const result=fn();
-		if(typeof(result)==="function"){
-			result(secondFn);
-		}
-		else{
-			fileRequestMemory_openedIds=fileRequestMemory_openedIds.filter(item=>item!==id)
-		}
-	};
-	secondFn();
-}
 function listFiles(id,path,types){
 	const socket=sockets.get(id);
 	return new Promise((resolve,reject)=>{
@@ -100,6 +62,7 @@ function listFiles(id,path,types){
 function writeFile(id,path,buffer){
 	const socket=sockets.get(id);
 	return new Promise((resolve,reject)=>{
+		console.warn("WARNING: THIS FUNCTION IS BETA! YOU CANT UPLOAD FILES OVER 1MB I THINK!");
 		socket.emit("writeFile",path,buffer,data=>{
 			const {success,error}=data;
 			//if(error) reject(error);
@@ -131,7 +94,6 @@ function createClient(host="127.0.0.1",port=3245){
 	const id=Date.now();
 	
 	sockets.set(id,socket);
-	fileRequestMemory.set(id,[]);
 
 	console.log(`connecting to ${host} with port ${port}`);
 	socket.on("connect",()=>{
@@ -145,7 +107,6 @@ function createClient(host="127.0.0.1",port=3245){
 			return;
 		}
 		if(typeof(startIndex)=="boolean"&&startIndex){
-			console.log(`\nDatei empfangen! Größe beträgt ${entry.size} Bytes`);
 			entry.resolve({
 				buffer: Buffer.from(entry.buffer),
 				file: entry.file,
@@ -169,7 +130,6 @@ function createClient(host="127.0.0.1",port=3245){
 		}
 
 		files.set(id,entry);
-		process.stdout.write(`${entry.file} Add Chunk: ${String(startIndex).padStart(String(entry.size).length,"0")}-${String(startIndex+chunk.length).padStart(String(entry.size).length,"0")} Chunk Address, ${String(startIndex).padStart(String(entry.size).length,"0")}/${entry.size} Bytes, ${chunk.length} Chunk Größe Bytes\r`);
 		cb(true);
 	});
 	return{
