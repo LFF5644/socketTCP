@@ -14,7 +14,6 @@ function getFile(id,path){return new Promise((resolve,reject)=>{
 			reject(path);
 		},
 		onResolve: (value,path,resolve)=>{
-			console.log("downloaded "+path);
 			resolve(value);
 		},
 	};
@@ -26,9 +25,7 @@ function getFile(id,path){return new Promise((resolve,reject)=>{
 		path=path.path;
 
 	}
-	console.log("ask server for downloading "+path);
 	socket.emit("get-file",path,data=>{
-		console.log("server accept download request for "+path);
 		if(!data.error) files.set(data.id,{
 			buffer: new Uint8Array(data.size),
 			file: data.file,
